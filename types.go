@@ -50,6 +50,11 @@ func (s Slot) Sub(x uint64) Slot {
 	return Slot(uint64(s) - x)
 }
 
+// Mod returns result of `slot % x`.
+func (s Slot) Mod(x uint64) Slot {
+	return Slot(uint64(s) % x)
+}
+
 // HashTreeRoot returns calculated hash root.
 func (s Slot) HashTreeRoot() ([32]byte, error) {
 	return fssz.HashWithDefaultHasher(s)
@@ -95,6 +100,11 @@ func (e Epoch) Sub(x uint64) Epoch {
 		panic("underflow")
 	}
 	return Epoch(uint64(e) - x)
+}
+
+// Mod returns result of `epoch % x`.
+func (e Epoch) Mod(x uint64) Epoch {
+	return Epoch(uint64(e) % x)
 }
 
 // HashTreeRoot returns calculated hash root.
