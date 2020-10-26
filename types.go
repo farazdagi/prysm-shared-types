@@ -1,6 +1,13 @@
 // Package types contains types shared between various parts of the system (beacon chain, validator, slasher).
 package types
 
+import (
+	fssz "github.com/ferranbt/fastssz"
+)
+
+var _ fssz.HashRoot = (Slot)(nil)
+var _ fssz.HashRoot = (Epoch)(nil)
+
 // Slot represents a single slot.
 type Slot uint64
 
@@ -43,6 +50,17 @@ func (s Slot) Sub(x uint64) Slot {
 	return Slot(uint64(s) - x)
 }
 
+// HashTreeRoot returns calculated hash root.
+func (s Slot) HashTreeRoot() ([32]byte, error) {
+	return fssz.HashWithDefaultHasher(s)
+}
+
+// HashWithDefaultHasher hashes a HashRoot object with a Hasher from the default HasherPool.
+func (s Slot) HashTreeRootWith(hh *fssz.Hasher) error {
+	hh.PutUint64(s.Uint64())
+	return nil
+}
+
 // ToEpoch returns x converted to Epoch.
 func ToEpoch(x uint64) Epoch {
 	return Epoch(x)
@@ -77,4 +95,15 @@ func (e Epoch) Sub(x uint64) Epoch {
 		panic("underflow")
 	}
 	return Epoch(uint64(e) - x)
+}
+
+// HashTreeRoot returns calculated hash root.
+func (e Epoch) HashTreeRoot() ([32]byte, error) {
+	return fssz.HashWithDefaultHasher(e)
+}
+
+// HashWithDefaultHasher hashes a HashRoot object with a Hasher from the default HasherPool.
+func (e Epoch) HashTreeRootWith(hh *fssz.Hasher) error {
+	hh.PutUint64(e.Uint64())
+	return nil
 }
