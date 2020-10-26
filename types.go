@@ -5,8 +5,8 @@ import (
 	fssz "github.com/ferranbt/fastssz"
 )
 
-var _ fssz.HashRoot = (Slot)(nil)
-var _ fssz.HashRoot = (Epoch)(nil)
+var _ fssz.HashRoot = (Slot)(0)
+var _ fssz.HashRoot = (Epoch)(0)
 
 // Slot represents a single slot.
 type Slot uint64
