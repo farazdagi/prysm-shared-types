@@ -29,6 +29,16 @@ func (s Slot) Mul(x uint64) Slot {
 	return Slot(uint64(s) * x)
 }
 
+// MulSlot multiplies slot by another slot.
+func (s Slot) MulSlot(x Slot) Slot {
+	return s * x
+}
+
+// MulEpoch multiplies slot using epoch value.
+func (s Slot) MulEpoch(x Epoch) Slot {
+	return Slot(uint64(s) * uint64(x))
+}
+
 // Div divides slot by x.
 func (s Slot) Div(x uint64) Slot {
 	if x == 0 {
@@ -37,9 +47,35 @@ func (s Slot) Div(x uint64) Slot {
 	return Slot(uint64(s) / x)
 }
 
+// DivSlot divides slot by another slot.
+func (s Slot) DivSlot(x Slot) Slot {
+	if x == 0 {
+		panic("divbyzero")
+	}
+	return s / x
+}
+
+// DivEpoch divides slot using epoch value.
+func (s Slot) DivEpoch(x Epoch) Slot {
+	if x == 0 {
+		panic("divbyzero")
+	}
+	return Slot(uint64(s) / uint64(x))
+}
+
 // Add increases slot by x.
 func (s Slot) Add(x uint64) Slot {
 	return Slot(uint64(s) + x)
+}
+
+// AddSlot increases slot by another slot.
+func (s Slot) AddSlot(x Slot) Slot {
+	return s + x
+}
+
+// AddEpoch increases slot using epoch value.
+func (s Slot) AddEpoch(x Epoch) Slot {
+	return Slot(uint64(s) + uint64(x))
 }
 
 // Sub subtracts x from the slot.
@@ -50,9 +86,35 @@ func (s Slot) Sub(x uint64) Slot {
 	return Slot(uint64(s) - x)
 }
 
+// SubSlot finds difference between two slot values.
+func (s Slot) SubSlot(x Slot) Slot {
+	if s < x {
+		panic("underflow")
+	}
+	return s - x
+}
+
+// SubEpoch subtracts value of epoch type from the slot.
+func (s Slot) SubEpoch(x Epoch) Slot {
+	if uint64(s) < uint64(x) {
+		panic("underflow")
+	}
+	return Slot(uint64(s) - uint64(x))
+}
+
 // Mod returns result of `slot % x`.
 func (s Slot) Mod(x uint64) Slot {
 	return Slot(uint64(s) % x)
+}
+
+// ModSlot returns result of `slot % slot`.
+func (s Slot) ModSlot(x Slot) Slot {
+	return s % x
+}
+
+// ModEpoch returns result of `slot % epoch`.
+func (s Slot) ModEpoch(x Epoch) Slot {
+	return Slot(uint64(s) % uint64(x))
 }
 
 // HashTreeRoot returns calculated hash root.
