@@ -2,11 +2,17 @@
 package types
 
 import (
+	"fmt"
+
 	fssz "github.com/ferranbt/fastssz"
 )
 
 var _ fssz.HashRoot = (Slot)(0)
 var _ fssz.HashRoot = (Epoch)(0)
+var _ fssz.Marshaler = (*Slot)(nil)
+var _ fssz.Marshaler = (*Epoch)(nil)
+var _ fssz.Unmarshaler = (*Slot)(nil)
+var _ fssz.Unmarshaler = (*Epoch)(nil)
 
 // Slot represents a single slot.
 type Slot uint64
@@ -128,6 +134,35 @@ func (s Slot) HashTreeRootWith(hh *fssz.Hasher) error {
 	return nil
 }
 
+// UnmarshalSSZ deserializes the provided bytes buffer into the slot object.
+func (s *Slot) UnmarshalSSZ(buf []byte) error {
+	if len(buf) != s.SizeSSZ() {
+		return fmt.Errorf("expected buffer of length %d received %d", s.SizeSSZ(), len(buf))
+	}
+	*s = Slot(fssz.UnmarshallUint64(buf))
+	return nil
+}
+
+// MarshalSSZTo marshals slot with the provided byte slice.
+func (s *Slot) MarshalSSZTo(dst []byte) ([]byte, error) {
+	marshalled, err := s.MarshalSSZ()
+	if err != nil {
+		return nil, err
+	}
+	return append(dst, marshalled...), nil
+}
+
+// MarshalSSZ marshals slot into a serialized object.
+func (s *Slot) MarshalSSZ() ([]byte, error) {
+	marshalled := fssz.MarshalUint64([]byte{}, s.Uint64())
+	return marshalled, nil
+}
+
+// SizeSSZ returns the size of the serialized object.
+func (s *Slot) SizeSSZ() int {
+	return 8
+}
+
 // ToEpoch returns x converted to Epoch.
 func ToEpoch(x uint64) Epoch {
 	return Epoch(x)
@@ -178,4 +213,33 @@ func (e Epoch) HashTreeRoot() ([32]byte, error) {
 func (e Epoch) HashTreeRootWith(hh *fssz.Hasher) error {
 	hh.PutUint64(e.Uint64())
 	return nil
+}
+
+// UnmarshalSSZ deserializes the provided bytes buffer into the epoch object.
+func (e *Epoch) UnmarshalSSZ(buf []byte) error {
+	if len(buf) != e.SizeSSZ() {
+		return fmt.Errorf("expected buffer of length %d received %d", e.SizeSSZ(), len(buf))
+	}
+	*e = Epoch(fssz.UnmarshallUint64(buf))
+	return nil
+}
+
+// MarshalSSZTo marshals epoch with the provided byte slice.
+func (e *Epoch) MarshalSSZTo(dst []byte) ([]byte, error) {
+	marshalled, err := e.MarshalSSZ()
+	if err != nil {
+		return nil, err
+	}
+	return append(dst, marshalled...), nil
+}
+
+// MarshalSSZ marshals epoch into a serialized object.
+func (e *Epoch) MarshalSSZ() ([]byte, error) {
+	marshalled := fssz.MarshalUint64([]byte{}, e.Uint64())
+	return marshalled, nil
+}
+
+// SizeSSZ returns the size of the serialized object.
+func (e *Epoch) SizeSSZ() int {
+	return 8
 }
