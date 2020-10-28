@@ -18,11 +18,6 @@ func ToSlot(x uint64) Slot {
 	return Slot(x)
 }
 
-// Uint64 returns slot as underlying type.
-func (s Slot) Uint64() uint64 {
-	return uint64(s)
-}
-
 // Mul multiplies slot by x.
 func (s Slot) Mul(x uint64) Slot {
 	return Slot(uint64(s) * x)
@@ -123,7 +118,7 @@ func (s Slot) HashTreeRoot() ([32]byte, error) {
 
 // HashWithDefaultHasher hashes a HashRoot object with a Hasher from the default HasherPool.
 func (s Slot) HashTreeRootWith(hh *fssz.Hasher) error {
-	hh.PutUint64(s.Uint64())
+	hh.PutUint64(uint64(s))
 	return nil
 }
 
@@ -147,7 +142,7 @@ func (s *Slot) MarshalSSZTo(dst []byte) ([]byte, error) {
 
 // MarshalSSZ marshals slot into a serialized object.
 func (s *Slot) MarshalSSZ() ([]byte, error) {
-	marshalled := fssz.MarshalUint64([]byte{}, s.Uint64())
+	marshalled := fssz.MarshalUint64([]byte{}, uint64(*s))
 	return marshalled, nil
 }
 

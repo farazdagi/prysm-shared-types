@@ -18,11 +18,6 @@ func ToEpoch(x uint64) Epoch {
 	return Epoch(x)
 }
 
-// Uint64 returns epoch as underlying type.
-func (e Epoch) Uint64() uint64 {
-	return uint64(e)
-}
-
 // Mul multiplies epoch by x.
 func (e Epoch) Mul(x uint64) Epoch {
 	return Epoch(uint64(e) * x)
@@ -61,7 +56,7 @@ func (e Epoch) HashTreeRoot() ([32]byte, error) {
 
 // HashWithDefaultHasher hashes a HashRoot object with a Hasher from the default HasherPool.
 func (e Epoch) HashTreeRootWith(hh *fssz.Hasher) error {
-	hh.PutUint64(e.Uint64())
+	hh.PutUint64(uint64(e))
 	return nil
 }
 
@@ -85,7 +80,7 @@ func (e *Epoch) MarshalSSZTo(dst []byte) ([]byte, error) {
 
 // MarshalSSZ marshals epoch into a serialized object.
 func (e *Epoch) MarshalSSZ() ([]byte, error) {
-	marshalled := fssz.MarshalUint64([]byte{}, e.Uint64())
+	marshalled := fssz.MarshalUint64([]byte{}, uint64(*e))
 	return marshalled, nil
 }
 
