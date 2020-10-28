@@ -44,6 +44,11 @@ func (e Epoch) Mod(x uint64) Epoch {
 	return Epoch(uint64(e) % x)
 }
 
+// Mod returns result of `epoch % slot`.
+func (e Epoch) ModSlot(x Slot) Epoch {
+	return Epoch(uint64(e) % uint64(x))
+}
+
 // HashTreeRoot returns calculated hash root.
 func (e Epoch) HashTreeRoot() ([32]byte, error) {
 	return fssz.HashWithDefaultHasher(e)
