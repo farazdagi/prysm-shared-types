@@ -31,6 +31,16 @@ func (e Epoch) Add(x uint64) Epoch {
 	return Epoch(uint64(e) + x)
 }
 
+// AddSlot increases epoch using slot value.
+func (e Epoch) AddSlot(x Slot) Epoch {
+	return e + Epoch(x)
+}
+
+// AddEpoch increases epoch using another epoch value.
+func (e Epoch) AddEpoch(x Epoch) Epoch {
+	return Epoch(uint64(e) + uint64(x))
+}
+
 // Sub subtracts x from the epoch.
 func (e Epoch) Sub(x uint64) Epoch {
 	if uint64(e) < x {
