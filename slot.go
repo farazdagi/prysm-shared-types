@@ -13,11 +13,6 @@ var _ fssz.Unmarshaler = (*Slot)(nil)
 // Slot represents a single slot.
 type Slot uint64
 
-// ToSlot returns x converted to Slot.
-func ToSlot(x uint64) Slot {
-	return Slot(x)
-}
-
 // Mul multiplies slot by x.
 func (s Slot) Mul(x uint64) Slot {
 	return Slot(uint64(s) * x)

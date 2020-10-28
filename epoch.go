@@ -13,11 +13,6 @@ var _ fssz.Unmarshaler = (*Epoch)(nil)
 // Epoch represents a single epoch.
 type Epoch uint64
 
-// ToEpoch returns x converted to Epoch.
-func ToEpoch(x uint64) Epoch {
-	return Epoch(x)
-}
-
 // Mul multiplies epoch by x.
 func (e Epoch) Mul(x uint64) Epoch {
 	return Epoch(uint64(e) * x)
